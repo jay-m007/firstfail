@@ -1,0 +1,11 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.1, pytest-8.0.0
+collected 0 items / 1 error
+
+==================================== ERRORS ====================================
+__________________________ ERROR collecting tests/test_api.py __________________
+ImportError while importing test module '/home/runner/work/app/tests/test_api.py'.
+E   ModuleNotFoundError: No module named 'httpx'
+=========================== short test summary info ============================
+ERROR tests/test_api.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!

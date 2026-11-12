@@ -1,0 +1,39 @@
+{
+  "name": "firstfail",
+  "version": "0.1.0",
+  "description": "Finds the one real failure in a CI log and separates it from the noise it caused. Secrets are scrubbed before anything, including the model, sees a byte.",
+  "type": "module",
+  "bin": {
+    "firstfail": "src/cli.ts",
+    "ff": "src/cli.ts"
+  },
+  "scripts": {
+    "test": "node --test --test-concurrency=1 --test-timeout=60000 \"test/**/*.test.ts\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "eval": "node eval/run.ts"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
+  "keywords": [
+    "ci",
+    "logs",
+    "triage",
+    "flaky",
+    "ollama",
+    "llm",
+    "cli",
+    "devtools",
+    "github-actions"
+  ],
+  "author": "Jay Maurya",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jay-m007/firstfail.git"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.0",
+    "typescript": "5.9.3"
+  }
+}

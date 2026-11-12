@@ -1,0 +1,9 @@
+Run npm ci
+added 412 packages in 9s
+Run npm test
+PASS test/a.test.ts
+PASS test/b.test.ts
+Tests:       53 passed, 53 total
+Done in 12.4s
+error handling is covered by test/errors.test.ts
+0 errors, 0 warnings

@@ -1,0 +1,18 @@
+> Task :compileJava
+> Task :test
+  running suite 0
+  running suite 1
+  running suite 2
+  running suite 3
+  running suite 4
+  running suite 5
+
+FATAL ERROR: Reached heap limit Allocation failed - JavaScript heap out of memory
+ 1: 0xb8a3e0 node::Abort() [node]
+ 2: 0xa8f4f5 node::FatalError(char const*)
+  ✗ suite 0 failed: worker process exited unexpectedly
+  ✗ suite 1 failed: worker process exited unexpectedly
+  ✗ suite 2 failed: worker process exited unexpectedly
+  ✗ suite 3 failed: worker process exited unexpectedly
+FAILURE: Build failed with an exception.
+Process 'command 'node'' finished with non-zero exit value 134

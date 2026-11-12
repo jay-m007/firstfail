@@ -1,0 +1,56 @@
+2026-11-12T09:14:02Z ##[group]Run docker compose up -d
+2026-11-12T09:14:03Z  Container app-postgres-1  Creating
+2026-11-12T09:14:04Z  Container app-postgres-1  Creating
+2026-11-12T09:14:05Z  Container app-postgres-1  Creating
+2026-11-12T09:14:06Z  Container app-postgres-1  Creating
+2026-11-12T09:14:09Z Error response from daemon: driver failed programming external connectivity on endpoint app-postgres-1: Bind for 0.0.0.0:5432 failed: port is already allocated
+2026-11-12T09:14:09Z ##[endgroup]
+2026-11-12T09:14:10Z ##[group]Run npm test
+2026-11-12T09:14:11Z > api@1.0.0 test
+FAIL test/orders-0.test.ts
+  ● orders › creates an order
+    connect ECONNREFUSED 127.0.0.1:5432
+      at Connection.connect (node_modules/pg/lib/connection.js:60:20)
+FAIL test/orders-1.test.ts
+  ● orders › creates an order
+    connect ECONNREFUSED 127.0.0.1:5432
+      at Connection.connect (node_modules/pg/lib/connection.js:61:20)
+FAIL test/orders-2.test.ts
+  ● orders › creates an order
+    connect ECONNREFUSED 127.0.0.1:5432
+      at Connection.connect (node_modules/pg/lib/connection.js:62:20)
+FAIL test/orders-3.test.ts
+  ● orders › creates an order
+    connect ECONNREFUSED 127.0.0.1:5432
+      at Connection.connect (node_modules/pg/lib/connection.js:63:20)
+FAIL test/orders-4.test.ts
+  ● orders › creates an order
+    connect ECONNREFUSED 127.0.0.1:5432
+      at Connection.connect (node_modules/pg/lib/connection.js:64:20)
+FAIL test/orders-5.test.ts
+  ● orders › creates an order
+    connect ECONNREFUSED 127.0.0.1:5432
+      at Connection.connect (node_modules/pg/lib/connection.js:65:20)
+FAIL test/orders-6.test.ts
+  ● orders › creates an order
+    connect ECONNREFUSED 127.0.0.1:5432
+      at Connection.connect (node_modules/pg/lib/connection.js:66:20)
+FAIL test/orders-7.test.ts
+  ● orders › creates an order
+    connect ECONNREFUSED 127.0.0.1:5432
+      at Connection.connect (node_modules/pg/lib/connection.js:67:20)
+FAIL test/orders-8.test.ts
+  ● orders › creates an order
+    connect ECONNREFUSED 127.0.0.1:5432
+      at Connection.connect (node_modules/pg/lib/connection.js:68:20)
+FAIL test/orders-9.test.ts
+  ● orders › creates an order
+    connect ECONNREFUSED 127.0.0.1:5432
+      at Connection.connect (node_modules/pg/lib/connection.js:69:20)
+FAIL test/orders-10.test.ts
+  ● orders › creates an order
+    connect ECONNREFUSED 127.0.0.1:5432
+      at Connection.connect (node_modules/pg/lib/connection.js:70:20)
+Tests:       11 failed, 42 passed, 53 total
+npm ERR! code ELIFECYCLE
+##[error]Process completed with exit code 1.

@@ -1,0 +1,6 @@
+Run lint
+src/a.ts:3:1 - error TS2304: Cannot find name 'foo'.
+Run tests
+connect ECONNREFUSED 127.0.0.1:6379
+FAIL test/cache.test.ts
+Tests: 1 failed

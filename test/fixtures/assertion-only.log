@@ -1,0 +1,12 @@
+> vitest run
+
+ ✓ src/money.test.ts (3)
+ ✗ src/tax.test.ts (1)
+   ✗ applies the reduced rate
+     AssertionError: expected 118 to equal 105
+      - Expected   105
+      + Received   118
+      at src/tax.test.ts:14:22
+
+ Test Files  1 failed | 1 passed (2)
+ Tests  1 failed | 3 passed (4)
