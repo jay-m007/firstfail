@@ -42,6 +42,17 @@ export interface Triage {
 
 const article = (word: string) => (/^[aeiou]/i.test(word) ? "an" : "a");
 
+/**
+ * The narrow case where a line ABOVE the cause belongs to the same failure: a test runner prints
+ * the name of the failing test and then the assertion that explains it. Nothing else qualifies —
+ * a build error above an environment failure is a separate problem, not part of it.
+ */
+const NAMES_THE_FAILURE: Record<string, string[]> = {
+  assertion: ["test-failure"],
+  "test-failure": ["test-failure"],
+  error: ["test-failure"],
+};
+
 /** Which kinds a cause of a given kind can account for. */
 const EXPLAINS: Record<string, string[]> = {
   // An environment failure explains a build that then failed too: the build had nothing to work
@@ -106,8 +117,19 @@ export function triage(rawText: string, o: TriageOptions = {}): Triage {
       if (canExplain.includes(c.kind)) downstream.push({ candidate: c, because: c.kind === cause.kind ? `the same failure again, after line ${cause.line}` : `${article(c.kind)} ${c.kind} after ${article(cause.kind)} ${cause.kind} failure is usually its consequence` });
       else unexplained.push(c);
     }
-    // Anything before the cause that the cause cannot have produced deserves to be seen.
-    for (const { c } of weighted) if (c.line < cause.line) unexplained.push(c);
+    // A test runner prints the name of the failing test, then the assertion that explains it. Those
+    // are one event, not two, even though the name comes first, so a line just above the cause that
+    // the cause accounts for is folded in rather than listed as a separate problem.
+    const SAME_EVENT_LINES = 25;
+    for (const { c } of weighted) {
+      if (c.line >= cause.line) continue;
+      if ((NAMES_THE_FAILURE[cause.kind] ?? []).includes(c.kind) && cause.line - c.line <= SAME_EVENT_LINES) {
+        downstream.push({ candidate: c, because: `the same failure, named by the runner ${cause.line - c.line === 1 ? "on the line above" : `${cause.line - c.line} lines above`}` });
+      } else {
+        unexplained.push(c);
+      }
+    }
+    downstream.sort((a, b) => a.candidate.line - b.candidate.line);
     unexplained.sort((a, b) => a.line - b.line);
 
     if (!downstream.length && !unexplained.length && all.length === 1) reasoning.push("it is the only failure in the log");

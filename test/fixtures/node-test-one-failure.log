@@ -1,0 +1,14 @@
+2026-11-09T04:12:01.1Z ##[group]Run npm test
+2026-11-09T04:12:02.0Z > pocketcloud@0.1.0 test
+2026-11-09T04:12:09.4Z ✔ a request to a sleeping app wakes it (412.1ms)
+2026-11-09T04:12:10.1Z ✔ a crashing app gives a readable error with its log (81.9ms)
+2026-11-09T04:12:10.7Z ✖ an app that grows past its memory limit is stopped (532.8ms)
+2026-11-09T04:12:10.8Z ✔ the control API needs the admin token (22.4ms)
+2026-11-09T04:12:11.0Z   AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+2026-11-09T04:12:11.0Z   + actual - expected
+2026-11-09T04:12:11.0Z   + 'running'
+2026-11-09T04:12:11.0Z   - 'stopped'
+2026-11-09T04:12:11.1Z       at TestContext.<anonymous> (test/limits.test.ts:48:3)
+2026-11-09T04:12:12.0Z ℹ pass 61
+2026-11-09T04:12:12.0Z ℹ fail 1
+2026-11-09T04:12:12.3Z ##[error]Process completed with exit code 1.

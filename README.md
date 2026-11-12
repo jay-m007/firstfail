@@ -138,15 +138,21 @@ line with carriage returns, and understands CI group markers and leading timesta
 ## Development
 
 ```
-npm test          # 59 tests, no network and no model needed
+npm test          # 63 tests, no network and no model needed
 npm run typecheck
 npm run eval      # needs Ollama; scores the model against logs whose cause is known
 ```
 
-The tests run on eight fixture logs: a docker port clash that fails eleven tests, a genuine assertion
-failure with nothing else wrong, an out-of-memory cascade, a clean passing log, a log full of
-credentials, a pytest import error, two unrelated failures in one log, and a log of ANSI colour and
-progress-bar rewrites. Each one checks both the verdict and that the reported line numbers still point
-at the right lines of the original file.
+The tests run on fixture logs covering a docker port clash that fails eleven tests, a genuine
+assertion failure with nothing else wrong, an out-of-memory cascade, a clean passing log, a log full
+of credentials, a pytest import error, two unrelated failures in one log, a node:test run where a
+*passing* test is named "gives a readable error", and a log of ANSI colour and progress-bar rewrites.
+Each one checks both the verdict and that the reported line numbers still point at the right lines of
+the original file.
+
+Two of those fixtures come from bugs found by running it against a real failed GitHub Actions log
+rather than against anything written by hand: a passing test whose name contained the word "error"
+outranked the test that actually failed, and the cross character node:test uses (`✖`) was not in the
+pattern at all, so the real failing line was never even a candidate.
 
 MIT licensed.

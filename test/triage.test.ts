@@ -125,3 +125,32 @@ test("a very large log is handled quickly", () => {
   assert.equal(t.cause!.line, 30_001);
   assert.ok(took < 10_000, `took ${took} ms for 60,000 lines`);
 });
+
+test("a passing test whose name contains \"error\" is not mistaken for the failure", () => {
+  const t = look("node-test-one-failure.log");
+  assert.ok(!/a crashing app gives a readable error/.test(t.cause!.text), `blamed a passing test: ${t.cause!.text}`);
+  const all = [t.cause!, ...t.downstream.map((d) => d.candidate), ...t.unexplained];
+  assert.ok(!all.some((c) => /✔/.test(c.text)), "a line marked as passing should never be a candidate");
+});
+
+test("the cross character each runner uses is recognised", () => {
+  const t = look("node-test-one-failure.log");
+  const all = [t.cause!, ...t.downstream.map((d) => d.candidate), ...t.unexplained];
+  assert.ok(all.some((c) => /memory limit is stopped/.test(c.text)), "the failing test line was not picked up at all");
+  // The assertion explains the failing test, so it is the better cause of the two.
+  assert.match(t.cause!.text, /AssertionError/);
+});
+
+test("the failing test's name and its assertion are treated as one failure, not two", () => {
+  const t = look("node-test-one-failure.log");
+  assert.match(t.cause!.text, /AssertionError/);
+  const named = t.downstream.find((d) => /memory limit is stopped/.test(d.candidate.text));
+  assert.ok(named, "the runner's line naming the test should be folded into the same failure");
+  assert.match(named!.because, /named by the runner/);
+  assert.ok(!t.unexplained.some((u) => /memory limit is stopped/.test(u.text)), "it is not a separate problem");
+});
+
+test("a genuinely separate earlier failure is still kept apart", () => {
+  const t = look("two-failures.log");
+  assert.ok(t.unexplained.some((u) => /TS2304/.test(u.text)), "a type error is not explained by a later connection failure");
+});

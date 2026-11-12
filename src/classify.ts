@@ -69,7 +69,8 @@ const RULES: Rule[] = [
 
   // What tests say.
   { id: "assertion", kind: "assertion", re: /\b(AssertionError|expected .+ (to equal|to be|but (got|received))|assert(ion)? failed|Expected:.*Received:|should (equal|be))\b/i, root: 30, meaning: "a test compared two values and they differed, which is the usual way a cause further up shows itself" },
-  { id: "jest-fail", kind: "test-failure", re: /^(\s*●|✕|✗|×|FAIL)\s+\S|^\s*\d+\)\s+\S|^(FAILED|ERROR)\s+\S+::|^--- FAIL:/, root: 25, meaning: "a test runner naming a test that failed" },
+  // The cross is written differently by every runner: ✕ (jest), ✗, ✖ (node:test), × (vitest), ❌.
+  { id: "jest-fail", kind: "test-failure", re: /^\s*(●|[✕✗✖×❌]|FAIL|not ok)\s*\S|^\s*\d+\)\s+\S|^(FAILED|ERROR)\s+\S+::|^--- FAIL:/, root: 25, meaning: "a test runner naming a test that failed" },
   { id: "test-summary", kind: "test-failure", re: /\b(\d+ (failed|failing|failures)|Tests:\s+\d+ failed|Test Files\s+\d+ failed)\b/i, root: 15, meaning: "a count of failures, which is a summary rather than a cause" },
 
   // Generic last resorts.
@@ -77,6 +78,13 @@ const RULES: Rule[] = [
   { id: "fatal", kind: "error", re: /\b(FATAL|fatal error|panic|unhandled (exception|rejection)|Uncaught \w*Error)\b/i, root: 75 },
   { id: "error-line", kind: "error", re: /(^|\s)(error|ERROR|Error:|##\[error\]|npm ERR!|\[ERROR\]|E\/)\b/, root: 40 },
 ];
+
+/**
+ * A test that passed is never a failure, however it is named. This matters more than it sounds:
+ * a passing test called "a crashing app gives a readable error with its log" contains the word
+ * error, and without this rule it outranks the test that actually failed two lines below it.
+ */
+const PASSED = /^\s*(✔|✓|√|ok\s+\d|PASS\b|--- PASS|\[PASS\])/;
 
 /** Lines that say "error" but are only telling you about handling errors, not reporting one. */
 const NOT_REALLY = [
@@ -90,6 +98,7 @@ const NOT_REALLY = [
 export function classifyLine(l: Line): Candidate | null {
   const text = l.text.trim();
   if (!text || text.length < 3) return null;
+  if (PASSED.test(text)) return null;
   if (NOT_REALLY.some((re) => re.test(text))) {
     // A stack frame or a deprecation is not a candidate, unless it also carries a hard failure.
     if (!RULES.slice(0, 20).some((r) => r.re.test(text))) return null;
